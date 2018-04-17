@@ -10,6 +10,8 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         IRouteBuilder Get(Action<HttpContext> handler);
         
+        IRouteBuilder Post(Action<HttpContext> handler);
+        
         IApplicationBuilder Use();
     }
 }

@@ -3,6 +3,7 @@ using AspNetCore.MicroService.Routing.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -48,6 +49,11 @@ namespace RoutingSample
                         .UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
                         .Route("funny")
                             .Get(async c => await c.Response.WriteAsync("yeah!"))
+                            .Post(async c =>
+                            {
+                                c.Request.EnableRewind();
+                                await c.Request.Body.CopyToAsync(c.Response.Body);
+                            })
                             .Use();
                 })
                 .Build()

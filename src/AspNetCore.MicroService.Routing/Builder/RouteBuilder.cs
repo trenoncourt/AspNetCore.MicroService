@@ -34,6 +34,18 @@ namespace AspNetCore.MicroService.Routing.Builder
             return this;
         }
 
+        public IRouteBuilder Post(Action<HttpContext> handler)
+        {
+            _routeBuilders.Add(builder =>
+            {
+                builder.MapPost(Template, async context =>
+                {
+                    handler(context);
+                });
+            });
+            return this;
+        }
+
         public IApplicationBuilder Use()
         {
             var routeBuilder = new Microsoft.AspNetCore.Routing.RouteBuilder(_app);
