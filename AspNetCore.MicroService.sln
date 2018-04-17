@@ -8,6 +8,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{1DC0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutingSample", "samples\RoutingSample\RoutingSample.csproj", "{D46B6560-818B-4480-94E9-2C4A6073D4F2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{403888BF-B6BA-41EF-9B14-9F291DDE6678}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Routing.Test", "tests\AspNetCore.MicroService.Routing.Test\AspNetCore.MicroService.Routing.Test.csproj", "{B6F14F5A-38CD-406C-AAFE-6CA61C0685C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,6 +20,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{06497EA4-F316-4CB3-B5C2-45DBD0566886} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
 		{D46B6560-818B-4480-94E9-2C4A6073D4F2} = {1DC02090-A09A-411C-8E0A-865C8C89C94A}
+		{B6F14F5A-38CD-406C-AAFE-6CA61C0685C0} = {403888BF-B6BA-41EF-9B14-9F291DDE6678}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{06497EA4-F316-4CB3-B5C2-45DBD0566886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -26,5 +31,9 @@ Global
 		{D46B6560-818B-4480-94E9-2C4A6073D4F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D46B6560-818B-4480-94E9-2C4A6073D4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D46B6560-818B-4480-94E9-2C4A6073D4F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F14F5A-38CD-406C-AAFE-6CA61C0685C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F14F5A-38CD-406C-AAFE-6CA61C0685C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F14F5A-38CD-406C-AAFE-6CA61C0685C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F14F5A-38CD-406C-AAFE-6CA61C0685C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

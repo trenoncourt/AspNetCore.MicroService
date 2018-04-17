@@ -8,7 +8,7 @@ namespace AspNetCore.MicroService.Routing.Builder
     /// <summary>
     /// Extension methods for the <see cref="T:Microsoft.AspNetCore.Builder.Extensions.MapMiddleware" />.
     /// </summary>
-    public static class MapExtensions
+    public static class ApplicationBuilderExtensions
     {
         private const string PathMatchKey = "Trenoncourt_PathMatch";
         
@@ -33,18 +33,33 @@ namespace AspNetCore.MicroService.Routing.Builder
         }
         
         /// <summary>
+        /// Define a new route using routebuilder with template.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="template"></param>
+        /// <returns></returns>
+        public static IRouteBuilder Route(this IApplicationBuilder app, string template)
+        {
+            return new RouteBuilder(template, app);
+        }
+        
+        /// <summary>
         /// Build the request pipeline based on matches of the given request path.
         /// </summary>
         /// <param name="app">The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder" /> instance.</param>
         /// <param name="pathMatch">The request path to match.</param>
         /// <returns>The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder" /> instance.</returns>
-        public static IApplicationBuilder Use(this IApplicationBuilder app, PathString pathMatch)
+        public static IApplicationBuilder Use(this IApplicationBuilder app)
         {
+            object pathMatch = app.Properties[PathMatchKey];
+            if (pathMatch == null)
+                return app;
+            
             RequestDelegate requestDelegate = app.Build();
             MapOptions options = new MapOptions
             {
                 Branch = requestDelegate,
-                PathMatch = pathMatch
+                PathMatch = (PathString)pathMatch
             };
             return app.Use(next => new MapMiddleware(next, options).Invoke);
         }
