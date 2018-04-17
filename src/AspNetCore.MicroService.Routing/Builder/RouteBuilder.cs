@@ -58,6 +58,18 @@ namespace AspNetCore.MicroService.Routing.Builder
             return this;
         }
 
+        public IRouteBuilder Delete(Action<HttpContext> handler)
+        {
+            _routeBuilders.Add(builder =>
+            {
+                builder.MapDelete(Template, async context =>
+                {
+                    handler(context);
+                });
+            });
+            return this;
+        }
+
         public IApplicationBuilder Use()
         {
             var routeBuilder = new Microsoft.AspNetCore.Routing.RouteBuilder(_app);

@@ -14,6 +14,8 @@ namespace AspNetCore.MicroService.Routing.Builder
         
         IRouteBuilder Put(Action<HttpContext> handler);
         
+        IRouteBuilder Delete(Action<HttpContext> handler);
+        
         IApplicationBuilder Use();
     }
 }

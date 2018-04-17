@@ -122,5 +122,25 @@ namespace AspNetCore.MicroService.Routing.Test
             Assert.Equal(test, responseData);
         }
         
+        [Fact]
+        public async Task Delete_AddDeleteTestsRoute_VerifyResultIsTest()
+        {
+            // Arrange
+            var server = new TestServer(new WebHostBuilder()
+                .ConfigureServices(s => s.AddRouting().BuildServiceProvider())
+                .Configure(app => app.Route("tests").Delete(async c => await c.Response.WriteAsync("test")).Use()));
+
+            HttpClient client = server.CreateClient();
+            
+            // Act
+            var response = await client.DeleteAsync("/tests");
+            response.EnsureSuccessStatusCode();
+
+            string responseData = await response.Content.ReadAsStringAsync();
+            
+            // Assert
+            Assert.Equal("test", responseData);
+        }
+        
     }
 }

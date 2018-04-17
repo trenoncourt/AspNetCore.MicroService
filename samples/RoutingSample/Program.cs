@@ -59,6 +59,7 @@ namespace RoutingSample
                                 c.Request.EnableRewind();
                                 await c.Request.Body.CopyToAsync(c.Response.Body);
                             })
+                            .Delete(c => c.Response.StatusCode = 204)
                             .Use();
                 })
                 .Build()
