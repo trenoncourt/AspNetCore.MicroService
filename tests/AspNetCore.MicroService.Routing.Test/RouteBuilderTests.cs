@@ -76,5 +76,51 @@ namespace AspNetCore.MicroService.Routing.Test
             // Assert
             Assert.Equal(test, responseData);
         }
+        
+        [Fact]
+        public async Task Put_AddPutTestsRoute_VerifyResultIsTest()
+        {
+            // Arrange
+            var server = new TestServer(new WebHostBuilder()
+                .ConfigureServices(s => s.AddRouting().BuildServiceProvider())
+                .Configure(app => app.Route("tests").Put(async c => await c.Response.WriteAsync("test")).Use()));
+
+            HttpClient client = server.CreateClient();
+            
+            // Act
+            var response = await client.PutAsync("/tests", null);
+            response.EnsureSuccessStatusCode();
+
+            string responseData = await response.Content.ReadAsStringAsync();
+            
+            // Assert
+            Assert.Equal("test", responseData);
+        }
+        
+        [Fact]
+        public async Task Put_AddPutTestsRoute_VerifyResultEqualsBody()
+        {
+            // Arrange
+            string test = "test";
+            var server = new TestServer(new WebHostBuilder()
+                .ConfigureServices(s => s.AddRouting().BuildServiceProvider())
+                .Configure(app => app.Route("tests").Put(async c =>
+                {
+                    c.Request.EnableRewind();
+                    await c.Request.Body.CopyToAsync(c.Response.Body);
+                }).Use()));
+
+            HttpClient client = server.CreateClient();
+            
+            // Act
+            var response = await client.PutAsync("/tests", new StringContent(test));
+            response.EnsureSuccessStatusCode();
+
+            string responseData = await response.Content.ReadAsStringAsync();
+            
+            // Assert
+            Assert.Equal(test, responseData);
+        }
+        
     }
 }

@@ -54,6 +54,11 @@ namespace RoutingSample
                                 c.Request.EnableRewind();
                                 await c.Request.Body.CopyToAsync(c.Response.Body);
                             })
+                            .Put(async c =>
+                            {
+                                c.Request.EnableRewind();
+                                await c.Request.Body.CopyToAsync(c.Response.Body);
+                            })
                             .Use();
                 })
                 .Build()
