@@ -47,13 +47,15 @@ namespace RoutingSample
                     
                     app
                         .UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
-                        .Route("funny")
-                            .Get(async c => await c.Response.WriteAsync("yeah!"))
+                        .Route("users")
+                            .Get(async c => await c.Response.WriteAsync("lot of yeah!"))
                             .Post(async c =>
                             {
                                 c.Request.EnableRewind();
                                 await c.Request.Body.CopyToAsync(c.Response.Body);
                             })
+                        .Route("users/{id}")
+                            .Get(async c => await c.Response.WriteAsync("just one yeah!"))
                             .Put(async c =>
                             {
                                 c.Request.EnableRewind();

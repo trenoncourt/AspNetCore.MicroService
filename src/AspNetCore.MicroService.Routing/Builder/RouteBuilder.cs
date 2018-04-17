@@ -12,6 +12,7 @@ namespace AspNetCore.MicroService.Routing.Builder
     {
         private readonly List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>> _routeBuilders = new List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>>();
         private readonly IApplicationBuilder _app;
+        private List<RouteBuilder> _allRoutes = new List<RouteBuilder>();
         
         public RouteBuilder(string template, IApplicationBuilder app)
         {
@@ -19,8 +20,20 @@ namespace AspNetCore.MicroService.Routing.Builder
             _app = app;
         }
         
-        public string Template { get; }
+        public RouteBuilder(string template, IApplicationBuilder app, List<RouteBuilder> chainedRoutes)
+        {
+            Template = template;
+            _app = app;
+            _allRoutes = chainedRoutes;
+        }
         
+        public string Template { get; }
+
+        public IRouteBuilder Route(string template)
+        {
+            _allRoutes.Add(this);
+            return new RouteBuilder(template, _app, _allRoutes);
+        }
         
         public IRouteBuilder Get(Action<HttpContext> handler)
         {
@@ -73,13 +86,23 @@ namespace AspNetCore.MicroService.Routing.Builder
         public IApplicationBuilder Use()
         {
             var routeBuilder = new Microsoft.AspNetCore.Routing.RouteBuilder(_app);
+            
+            foreach (RouteBuilder route in _allRoutes)
+            {
+                route.AddRoutes(routeBuilder);
+            }
+            
+            AddRoutes(routeBuilder);
 
+            return _app.UseRouter(routeBuilder.Build());
+        }
+
+        private void AddRoutes(Microsoft.AspNetCore.Routing.IRouteBuilder routeBuilder)
+        {
             foreach (Action<Microsoft.AspNetCore.Routing.IRouteBuilder> addRoute in _routeBuilders)
             {
                 addRoute(routeBuilder);
             }
-
-            return _app.UseRouter(routeBuilder.Build());
         }
     }
 }
