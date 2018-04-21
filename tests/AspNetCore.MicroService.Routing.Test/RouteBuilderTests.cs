@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using AspNetCore.MicroService.Routing.Builder;
+using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -30,7 +31,7 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData = await response.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal("test", responseData);
+            responseData.Should().Be("test");
         }
         
         [Theory]
@@ -55,7 +56,7 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData = await response.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal(parameter, responseData);
+            responseData.Should().Be(parameter);
         }
         
         [Fact]
@@ -75,7 +76,7 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData = await response.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal("test", responseData);
+            responseData.Should().Be("test");
         }
         
         [Fact]
@@ -100,7 +101,7 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData = await response.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal(test, responseData);
+            responseData.Should().Be(test);
         }
         
         [Fact]
@@ -120,7 +121,7 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData = await response.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal("test", responseData);
+            responseData.Should().Be("test");
         }
         
         [Fact]
@@ -145,7 +146,7 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData = await response.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal(test, responseData);
+            responseData.Should().Be("test");
         }
         
         [Fact]
@@ -165,7 +166,7 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData = await response.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal("test", responseData);
+            responseData.Should().Be("test");
         }
         
         [Fact]
@@ -196,8 +197,8 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData2 = await response2.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal(res1, responseData1);
-            Assert.Equal(res2, responseData2);
+            responseData1.Should().Be(res1);
+            responseData2.Should().Be(res2);
         }
         
         [Fact]
@@ -228,8 +229,8 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData2 = await response2.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal(res1, responseData1);
-            Assert.Equal(res2, responseData2);
+            responseData1.Should().Be(res1);
+            responseData2.Should().Be(res2);
         }
         
         [Fact]
@@ -260,8 +261,8 @@ namespace AspNetCore.MicroService.Routing.Test
             string responseData2 = await response2.Content.ReadAsStringAsync();
             
             // Assert
-            Assert.Equal(res1, responseData1);
-            Assert.Equal(res2, responseData2);
+            responseData1.Should().Be(res1);
+            responseData2.Should().Be(res2);
         }
         
     }
