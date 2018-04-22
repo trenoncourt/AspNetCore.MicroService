@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using AspNetCore.MicroService.DependencyInjection;
 using AspNetCore.MicroService.Routing.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,7 @@ namespace RoutingSample
                 {
                     services
                         .AddRouting()
+                        .AddMicroService()
                         .AddCors()
                         .BuildServiceProvider();
                 })
