@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Rou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService", "src\AspNetCore.MicroService\AspNetCore.MicroService.csproj", "{04A596B2-2423-41C6-8B0C-0B347753864F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Extensions.Json", "src\AspNetCore.MicroService.Extensions.Json\AspNetCore.MicroService.Extensions.Json.csproj", "{487D44F6-53C4-470E-955C-CE5DB6C5A276}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,7 @@ Global
 		{D46B6560-818B-4480-94E9-2C4A6073D4F2} = {1DC02090-A09A-411C-8E0A-865C8C89C94A}
 		{B6F14F5A-38CD-406C-AAFE-6CA61C0685C0} = {403888BF-B6BA-41EF-9B14-9F291DDE6678}
 		{04A596B2-2423-41C6-8B0C-0B347753864F} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
+		{487D44F6-53C4-470E-955C-CE5DB6C5A276} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{06497EA4-F316-4CB3-B5C2-45DBD0566886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +45,9 @@ Global
 		{04A596B2-2423-41C6-8B0C-0B347753864F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04A596B2-2423-41C6-8B0C-0B347753864F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04A596B2-2423-41C6-8B0C-0B347753864F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{487D44F6-53C4-470E-955C-CE5DB6C5A276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{487D44F6-53C4-470E-955C-CE5DB6C5A276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{487D44F6-53C4-470E-955C-CE5DB6C5A276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{487D44F6-53C4-470E-955C-CE5DB6C5A276}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

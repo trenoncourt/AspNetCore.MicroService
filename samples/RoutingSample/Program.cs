@@ -40,7 +40,6 @@ namespace RoutingSample
                 {
                     services
                         .AddRouting()
-                        .AddMicroService()
                         .AddCors()
                         .BuildServiceProvider();
                 })

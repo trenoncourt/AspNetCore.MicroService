@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AspNetCore.MicroService.Extensions.Json\AspNetCore.MicroService.Extensions.Json.csproj" />
     <ProjectReference Include="..\..\src\AspNetCore.MicroService.Routing\AspNetCore.MicroService.Routing.csproj" />
     <ProjectReference Include="..\..\src\AspNetCore.MicroService\AspNetCore.MicroService.csproj" />
   </ItemGroup>

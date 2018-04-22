@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCore.MicroService.Builders
 {
-    public class MicroServiceOptionBuilder
+    public class MicroServiceBuilder
     {
-        public MicroServiceOptionBuilder(IServiceCollection services)
+        public MicroServiceBuilder(IServiceCollection services)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
         }
