@@ -13,7 +13,6 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AspNetCore.MicroService.Extensions.Json\AspNetCore.MicroService.Extensions.Json.csproj" />
-    <ProjectReference Include="..\..\src\AspNetCore.MicroService.Routing\AspNetCore.MicroService.Routing.csproj" />
+    <ProjectReference Include="..\..\samples\FullSample\FullSample.csproj" />
   </ItemGroup>
 </Project>
