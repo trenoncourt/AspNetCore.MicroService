@@ -6,6 +6,8 @@ namespace AspNetCore.MicroService.Routing.Builder
 {
     public interface IRouteBuilder
     {
+        string Template { get; }
+        
         IRouteBuilder Route(string template);
         
         IRouteBuilder Get(Action<HttpContext> handler);

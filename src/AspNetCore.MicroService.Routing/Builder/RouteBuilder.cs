@@ -12,7 +12,7 @@ namespace AspNetCore.MicroService.Routing.Builder
     {
         private readonly List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>> _routeBuilders = new List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>>();
         private readonly IApplicationBuilder _app;
-        private List<RouteBuilder> _allRoutes = new List<RouteBuilder>();
+        private readonly List<RouteBuilder> _allRoutes = new List<RouteBuilder>();
         
         public RouteBuilder(string template, IApplicationBuilder app)
         {

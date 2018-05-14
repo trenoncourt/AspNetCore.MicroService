@@ -2,4 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.MicroService.Extensions.Json\AspNetCore.MicroService.Extensions.Json.csproj" />
+    <ProjectReference Include="..\AspNetCore.MicroService.Routing\AspNetCore.MicroService.Routing.csproj" />
+    <ProjectReference Include="..\AspNetCore.MicroService\AspNetCore.MicroService.csproj" />
+  </ItemGroup>
 </Project>
