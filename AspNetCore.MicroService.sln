@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FullSample", "samples\FullS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.IntegrationTests", "tests\AspNetCore.MicroService.IntegrationTests\AspNetCore.MicroService.IntegrationTests.csproj", "{35B5FBED-F119-43BD-BAAD-C8BEC32DFE04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Extensions.Crud", "src\AspNetCore.MicroService.Extensions.Crud\AspNetCore.MicroService.Extensions.Crud.csproj", "{E0FEF08C-ACEC-4BEE-A33A-B3A39062D35B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,7 @@ Global
 		{487D44F6-53C4-470E-955C-CE5DB6C5A276} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
 		{3F9D338C-2E02-4F11-B570-CE8A8FAC4613} = {1DC02090-A09A-411C-8E0A-865C8C89C94A}
 		{35B5FBED-F119-43BD-BAAD-C8BEC32DFE04} = {403888BF-B6BA-41EF-9B14-9F291DDE6678}
+		{E0FEF08C-ACEC-4BEE-A33A-B3A39062D35B} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{06497EA4-F316-4CB3-B5C2-45DBD0566886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -63,5 +66,9 @@ Global
 		{35B5FBED-F119-43BD-BAAD-C8BEC32DFE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35B5FBED-F119-43BD-BAAD-C8BEC32DFE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35B5FBED-F119-43BD-BAAD-C8BEC32DFE04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0FEF08C-ACEC-4BEE-A33A-B3A39062D35B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0FEF08C-ACEC-4BEE-A33A-B3A39062D35B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0FEF08C-ACEC-4BEE-A33A-B3A39062D35B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0FEF08C-ACEC-4BEE-A33A-B3A39062D35B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
