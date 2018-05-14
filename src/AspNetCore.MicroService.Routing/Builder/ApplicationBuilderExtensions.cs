@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -41,6 +42,18 @@ namespace AspNetCore.MicroService.Routing.Builder
         public static IRouteBuilder Route(this IApplicationBuilder app, string template)
         {
             return new RouteBuilder(template, app);
+        }
+
+        /// <summary>
+        /// Define a new route using routebuilder with template.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="template"></param>
+        /// <param name="set"></param>
+        /// <returns></returns>
+        public static IRouteBuilder Route<T>(this IApplicationBuilder app, string template, ICollection<T> set)
+        {
+            return new RouteBuilder(template, app).AddSet(set);
         }
         
         /// <summary>

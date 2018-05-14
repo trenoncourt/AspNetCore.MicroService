@@ -26,6 +26,20 @@ namespace AspNetCore.MicroService.Extensions.Crud
                 await Get(c, set, c.GetRouteData().Values.First().Key);
             });
         }
+        public static IRouteBuilder Get(this IRouteBuilder routeBuilder)
+        {
+            return routeBuilder.Get(async c =>
+            {
+                int routeDataCount = c.GetRouteData().Values.Count;
+                if (routeDataCount == 0)
+                {
+                    await HttpContextExtensions.WriteJsonAsync(c, routeBuilder.Set);
+                    return;
+                }
+
+                await Get(c, routeBuilder.Set, c.GetRouteData().Values.First().Key);
+            });
+        }
         
         public static IRouteBuilder Get<T>(this IRouteBuilder routeBuilder, IEnumerable<T> set, string id)
         {

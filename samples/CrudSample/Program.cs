@@ -58,10 +58,10 @@ namespace CrudSample
                 {
                     app
                         .UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
-                        .Route("users")
-                            .Get(Users)
+                        .Route("users", Users)
+                            .Get()
                             .Post(Users)
-                        .Route("users/{id}")
+                        .Route("users/{id}", Users)
                             .Get(Users)
                             .Put(Users)
                             .Delete(Users)

@@ -28,11 +28,19 @@ namespace AspNetCore.MicroService.Routing.Builder
         }
         
         public string Template { get; }
+        
+        public dynamic Set { get; private set; }
 
         public IRouteBuilder Route(string template)
         {
             _allRoutes.Add(this);
             return new RouteBuilder(template, _app, _allRoutes);
+        }
+
+        public IRouteBuilder Route<T>(string template, ICollection<T> set)
+        {
+            _allRoutes.Add(this);
+            return new RouteBuilder(template, _app, _allRoutes).AddSet(set);
         }
         
         public IRouteBuilder Get(Action<HttpContext> handler)
@@ -80,6 +88,12 @@ namespace AspNetCore.MicroService.Routing.Builder
                     handler(context);
                 });
             });
+            return this;
+        }
+
+        public IRouteBuilder AddSet<T>(ICollection<T> set)
+        {
+            Set = set;
             return this;
         }
 
