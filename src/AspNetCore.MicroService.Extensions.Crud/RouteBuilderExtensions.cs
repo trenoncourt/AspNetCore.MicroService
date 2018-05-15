@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using AspNetCore.MicroService.Extensions.Json;
+using AspNetCore.MicroService.Routing;
+using AspNetCore.MicroService.Routing.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using IRouteBuilder = AspNetCore.MicroService.Routing.Builder.IRouteBuilder;
@@ -116,6 +119,35 @@ namespace AspNetCore.MicroService.Extensions.Crud
         public static Routing.Builder.IRouteBuilder<T> Delete<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder, string id)
         {
             return routeBuilder.Delete(c => { Delete(c, routeBuilder.Set as ICollection<T>, id); });
+        }
+
+        public static IRouteBuilder<T> Crud<T>(this IRouteBuilder<T> routeBuilder, Methods methods = Methods.Get | Methods.Post | Methods.Put | Methods.Delete, string id = "id")
+        {
+            if (methods.HasFlag(Methods.Get))
+            {
+                routeBuilder.Get();
+            }
+            if (methods.HasFlag(Methods.Post))
+            {
+                routeBuilder.Post();
+            }
+            if(methods.HasFlag(Methods.Get | Methods.Put | Methods.Delete))
+            {
+                routeBuilder.SubRoute(id);
+            }
+            if (methods.HasFlag(Methods.Get))
+            {
+                routeBuilder.Get();
+            }
+            if (methods.HasFlag(Methods.Put))
+            {
+                routeBuilder.Put();
+            }
+            if (methods.HasFlag(Methods.Delete))
+            {
+                routeBuilder.Delete();
+            }
+            return routeBuilder;
         }
 
         private static Task Get<T>(HttpContext c, IEnumerable<T> set, string id)

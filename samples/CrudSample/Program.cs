@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using AspNetCore.MicroService.DependencyInjection;
 using AspNetCore.MicroService.Extensions.Crud;
+using AspNetCore.MicroService.Extensions.Json;
 using AspNetCore.MicroService.Extensions.Json.DependencyInjection;
+using AspNetCore.MicroService.Routing;
 using AspNetCore.MicroService.Routing.Builder;
 using CrudSample.Dtos;
 using Microsoft.AspNetCore.Builder;
@@ -58,13 +60,7 @@ namespace CrudSample
                 {
                     app
                         .UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
-                        .Route("users", Users)
-                            .Get()
-                            .Post()
-                        .SubRoute("{id}")
-                            .Get()
-                            .Put()
-                            .Delete()
+                        .Route("users", Users).Crud()
                         .Use();
                 });
         }
