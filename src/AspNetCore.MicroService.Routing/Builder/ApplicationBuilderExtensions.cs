@@ -51,9 +51,9 @@ namespace AspNetCore.MicroService.Routing.Builder
         /// <param name="template"></param>
         /// <param name="set"></param>
         /// <returns></returns>
-        public static IRouteBuilder Route<T>(this IApplicationBuilder app, string template, ICollection<T> set)
+        public static IRouteBuilder<T> Route<T>(this IApplicationBuilder app, string template, IEnumerable<T> set)
         {
-            return new RouteBuilder(template, app).AddSet(set);
+            return new RouteBuilder<T>(template, app, set);
         }
         
         /// <summary>

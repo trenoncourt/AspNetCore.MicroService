@@ -26,14 +26,14 @@ namespace AspNetCore.MicroService.Extensions.Crud
                 await Get(c, set, c.GetRouteData().Values.First().Key);
             });
         }
-        public static IRouteBuilder Get(this IRouteBuilder routeBuilder)
+        public static Routing.Builder.IRouteBuilder<T> Get<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
         {
             return routeBuilder.Get(async c =>
             {
                 int routeDataCount = c.GetRouteData().Values.Count;
                 if (routeDataCount == 0)
                 {
-                    await HttpContextExtensions.WriteJsonAsync(c, routeBuilder.Set);
+                    await c.WriteJsonAsync(routeBuilder.Set);
                     return;
                 }
 
@@ -50,14 +50,15 @@ namespace AspNetCore.MicroService.Extensions.Crud
         {
             return routeBuilder.Post(c =>
             {
-                var o = c.ReadJsonBody<T>();
-                if (o != null)
-                {
-                    set.Add(o);
-                    c.Response.Headers["Location"] = $"/{routeBuilder.Template}/{typeof(T)?.GetType()?.GetProperty("Id")?.GetValue(o) ?? ""}";
-                    c.Response.StatusCode = 201;
-                }
-                else c.Response.StatusCode = 400;
+                Post(c, routeBuilder, set);
+            });
+        }
+        
+        public static Routing.Builder.IRouteBuilder<T> Post<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
+        {
+            return routeBuilder.Post(c =>
+            {
+                Post(c, routeBuilder, routeBuilder.Set as ICollection<T>);
             });
         }
         
@@ -75,6 +76,20 @@ namespace AspNetCore.MicroService.Extensions.Crud
             return routeBuilder.Put(c => { Put(c, set, id); });
         }
         
+        public static Routing.Builder.IRouteBuilder<T> Put<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
+        {
+            return routeBuilder.Put(c =>
+            {
+                string key = c.GetRouteData().Values.First().Key;
+                Put(c, routeBuilder.Set as ICollection<T>, key);
+            });
+        }
+        
+        public static Routing.Builder.IRouteBuilder<T> Put<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder, string id)
+        {
+            return routeBuilder.Put(c => { Put(c, routeBuilder.Set as ICollection<T>, id); });
+        }
+        
         public static IRouteBuilder Delete<T>(this IRouteBuilder routeBuilder, ICollection<T> set)
         {
             return routeBuilder.Delete(c =>
@@ -88,6 +103,20 @@ namespace AspNetCore.MicroService.Extensions.Crud
         {
             return routeBuilder.Delete(c => { Delete(c, set, id); });
         }
+        
+        public static Routing.Builder.IRouteBuilder<T> Delete<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
+        {
+            return routeBuilder.Delete(c =>
+            {
+                string key = c.GetRouteData().Values.First().Key;
+                Delete(c, routeBuilder.Set as ICollection<T>, key);
+            });
+        }
+        
+        public static Routing.Builder.IRouteBuilder<T> Delete<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder, string id)
+        {
+            return routeBuilder.Delete(c => { Delete(c, routeBuilder.Set as ICollection<T>, id); });
+        }
 
         private static Task Get<T>(HttpContext c, IEnumerable<T> set, string id)
         {
@@ -98,6 +127,18 @@ namespace AspNetCore.MicroService.Extensions.Crud
                 return Task.CompletedTask;
             }
             return c.WriteJsonAsync(o);
+        }
+
+        private static void Post<T>(HttpContext c, IRouteBuilder routeBuilder, ICollection<T> set)
+        {
+            var o = c.ReadJsonBody<T>();
+            if (o != null)
+            {
+                set.Add(o);
+                c.Response.Headers["Location"] = $"/{routeBuilder.Template}/{typeof(T)?.GetType()?.GetProperty("Id")?.GetValue(o) ?? ""}";
+                c.Response.StatusCode = 201;
+            }
+            else c.Response.StatusCode = 400;
         }
 
         private static void Put<T>(HttpContext c, IEnumerable<T> set, string id)

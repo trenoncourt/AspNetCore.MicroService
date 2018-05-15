@@ -60,11 +60,11 @@ namespace CrudSample
                         .UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
                         .Route("users", Users)
                             .Get()
-                            .Post(Users)
+                            .Post()
                         .Route("users/{id}", Users)
-                            .Get(Users)
-                            .Put(Users)
-                            .Delete(Users)
+                            .Get()
+                            .Put()
+                            .Delete()
                         .Use();
                 });
         }
