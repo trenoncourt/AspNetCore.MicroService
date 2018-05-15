@@ -61,7 +61,7 @@ namespace CrudSample
                         .Route("users", Users)
                             .Get()
                             .Post()
-                        .Route("users/{id}", Users)
+                        .SubRoute("{id}")
                             .Get()
                             .Put()
                             .Delete()

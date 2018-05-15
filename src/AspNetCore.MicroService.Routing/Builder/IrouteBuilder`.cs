@@ -9,6 +9,8 @@ namespace AspNetCore.MicroService.Routing.Builder
         IEnumerable<T> Set { get; }
 
         IRouteBuilder<T> Route(string template, ICollection<T> set);
+        
+        IRouteBuilder<T> SubRoute(string template);
 
         new IRouteBuilder<T> Get(Action<HttpContext> handler);
 

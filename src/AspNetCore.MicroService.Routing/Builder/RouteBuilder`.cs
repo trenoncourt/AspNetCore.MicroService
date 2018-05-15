@@ -27,6 +27,12 @@ namespace AspNetCore.MicroService.Routing.Builder
             return new RouteBuilder<T>(template, App, AllRoutes, set);
         }
 
+        public IRouteBuilder<T> SubRoute(string template)
+        {
+            AllRoutes.Add(this);
+            return new RouteBuilder<T>($"{Template}/{template.TrimStart('/')}", App, AllRoutes, Set);
+        }
+
         public new IRouteBuilder<T> Get(Action<HttpContext> handler)
         {
             RouteBuilders.Add(builder =>
