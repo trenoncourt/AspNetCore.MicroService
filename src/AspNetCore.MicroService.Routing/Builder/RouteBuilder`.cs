@@ -21,7 +21,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             Set = set;
         }
 
-        public IRouteBuilder<T> Route(string template, ICollection<T> set)
+        public IRouteBuilder<T> Route(string template, IEnumerable<T> set)
         {
             AllRoutes.Add(this);
             return new RouteBuilder<T>(template, App, AllRoutes, set);

@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudSample", "samples\CrudSample\CrudSample.csproj", "{99811F60-572D-4F4E-8DF4-42D04DB454B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Extensions.Crud.Tests", "tests\AspNetCore.MicroService.Extensions.Crud.Tests\AspNetCore.MicroService.Extensions.Crud.Tests.csproj", "{E31C985B-CEF3-4617-84CD-50D2685C0287}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,7 @@ Global
 		{35B5FBED-F119-43BD-BAAD-C8BEC32DFE04} = {403888BF-B6BA-41EF-9B14-9F291DDE6678}
 		{E0FEF08C-ACEC-4BEE-A33A-B3A39062D35B} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
 		{99811F60-572D-4F4E-8DF4-42D04DB454B0} = {1DC02090-A09A-411C-8E0A-865C8C89C94A}
+		{E31C985B-CEF3-4617-84CD-50D2685C0287} = {403888BF-B6BA-41EF-9B14-9F291DDE6678}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{06497EA4-F316-4CB3-B5C2-45DBD0566886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -77,5 +80,9 @@ Global
 		{99811F60-572D-4F4E-8DF4-42D04DB454B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99811F60-572D-4F4E-8DF4-42D04DB454B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99811F60-572D-4F4E-8DF4-42D04DB454B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31C985B-CEF3-4617-84CD-50D2685C0287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31C985B-CEF3-4617-84CD-50D2685C0287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31C985B-CEF3-4617-84CD-50D2685C0287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31C985B-CEF3-4617-84CD-50D2685C0287}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

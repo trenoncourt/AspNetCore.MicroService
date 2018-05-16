@@ -131,28 +131,30 @@ namespace AspNetCore.MicroService.Extensions.Crud
             {
                 routeBuilder.Post();
             }
+
             if(methods.HasFlag(Methods.Get | Methods.Put | Methods.Delete))
             {
-                routeBuilder.SubRoute(id);
-            }
-            if (methods.HasFlag(Methods.Get))
-            {
-                routeBuilder.Get();
-            }
-            if (methods.HasFlag(Methods.Put))
-            {
-                routeBuilder.Put();
-            }
-            if (methods.HasFlag(Methods.Delete))
-            {
-                routeBuilder.Delete();
+                var newRouteBuilder = routeBuilder.SubRoute($"{{id}}");
+                if (methods.HasFlag(Methods.Get))
+                {
+                    newRouteBuilder.Get();
+                }
+                if (methods.HasFlag(Methods.Put))
+                {
+                    newRouteBuilder.Put();
+                }
+                if (methods.HasFlag(Methods.Delete))
+                {
+                    newRouteBuilder.Delete();
+                }
+                return newRouteBuilder.Route(routeBuilder.Template, routeBuilder.Set);
             }
             return routeBuilder;
         }
 
         private static Task Get<T>(HttpContext c, IEnumerable<T> set, string id)
         {
-            T o = set.FirstOrDefault(x => typeof(T)?.GetType()?.GetProperty("Id")?.GetValue(x).ToString() == c.GetRouteValue(id).ToString());
+            T o = set.FirstOrDefault(x => typeof(T).GetProperty("Id")?.GetValue(x).ToString() == c.GetRouteValue(id).ToString());
             if (o == null)
             {
                 c.Response.StatusCode = 404;
@@ -167,7 +169,7 @@ namespace AspNetCore.MicroService.Extensions.Crud
             if (o != null)
             {
                 set.Add(o);
-                c.Response.Headers["Location"] = $"/{routeBuilder.Template}/{typeof(T)?.GetType()?.GetProperty("Id")?.GetValue(o) ?? ""}";
+                c.Response.Headers["Location"] = $"/{routeBuilder.Template}/{typeof(T).GetProperty("Id")?.GetValue(o) ?? ""}";
                 c.Response.StatusCode = 201;
             }
             else c.Response.StatusCode = 400;
@@ -176,19 +178,19 @@ namespace AspNetCore.MicroService.Extensions.Crud
         private static void Put<T>(HttpContext c, IEnumerable<T> set, string id)
         {
             string idValue = c.GetRouteValue(id).ToString();
-            T existing = set.FirstOrDefault(x => typeof(T)?.GetType()?.GetProperty("Id")?.GetValue(x).ToString().ToString() == idValue);
+            T existing = set.FirstOrDefault(x => typeof(T).GetProperty("Id")?.GetValue(x).ToString().ToString() == idValue);
             if (existing == null)
             {
                 c.Response.StatusCode = 404;
                 return;
             }
             var o = c.ReadJsonBody<T>();
-            if (typeof(T)?.GetType()?.GetProperty("Id")?.GetValue(o).ToString() != idValue)
+            if (typeof(T).GetProperty("Id")?.GetValue(o).ToString() != idValue)
             {
                 c.Response.StatusCode = 400;
                 return;
             }
-            foreach (PropertyInfo property in typeof(T)?.GetType()?.GetProperties(BindingFlags.Public))
+            foreach (PropertyInfo property in typeof(T).GetProperties())
             {
                 if (property.PropertyType.IsPrimitive 
                     || property.PropertyType == typeof(Decimal) 
@@ -198,16 +200,15 @@ namespace AspNetCore.MicroService.Extensions.Crud
                     || property.PropertyType == typeof(string)
                     || property.Name == "Id")
                 {
-                    continue;
+                    property.SetValue(existing, typeof(T).GetProperty(property.Name)?.GetValue(o));
                 }
-                property.SetValue(existing, typeof(T)?.GetType()?.GetProperty(property.Name)?.GetValue(o));
             }
             c.Response.StatusCode = 204;
         }
 
         private static void Delete<T>(HttpContext c, ICollection<T> set, string id)
         {
-            T o = set.FirstOrDefault(x => typeof(T)?.GetType()?.GetProperty("Id")?.GetValue(x).ToString() == c.GetRouteValue(id).ToString());
+            T o = set.FirstOrDefault(x => typeof(T).GetProperty("Id")?.GetValue(x).ToString() == c.GetRouteValue(id).ToString());
             if (o == null)
             {
                 c.Response.StatusCode = 404;
