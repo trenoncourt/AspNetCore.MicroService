@@ -6,10 +6,11 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using AspNetCore.MicroService.Extensions.Json;
 using AspNetCore.MicroService.Routing;
-using AspNetCore.MicroService.Routing.Builder;
+using AspNetCore.MicroService.Routing.Abstractions;
+using AspNetCore.MicroService.Routing.Abstractions.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using IRouteBuilder = AspNetCore.MicroService.Routing.Builder.IRouteBuilder;
+using IRouteBuilder = AspNetCore.MicroService.Routing.Abstractions.Builder.IRouteBuilder;
 
 namespace AspNetCore.MicroService.Extensions.Crud
 {
@@ -29,7 +30,7 @@ namespace AspNetCore.MicroService.Extensions.Crud
                 await Get(c, set, c.GetRouteData().Values.First().Key);
             });
         }
-        public static Routing.Builder.IRouteBuilder<T> Get<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
+        public static IRouteBuilder<T> Get<T>(this IRouteBuilder<T> routeBuilder)
         {
             return routeBuilder.Get(async c =>
             {
@@ -57,7 +58,7 @@ namespace AspNetCore.MicroService.Extensions.Crud
             });
         }
         
-        public static Routing.Builder.IRouteBuilder<T> Post<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
+        public static IRouteBuilder<T> Post<T>(this IRouteBuilder<T> routeBuilder)
         {
             return routeBuilder.Post(c =>
             {
@@ -79,7 +80,7 @@ namespace AspNetCore.MicroService.Extensions.Crud
             return routeBuilder.Put(c => { Put(c, set, id); });
         }
         
-        public static Routing.Builder.IRouteBuilder<T> Put<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
+        public static IRouteBuilder<T> Put<T>(this IRouteBuilder<T> routeBuilder)
         {
             return routeBuilder.Put(c =>
             {
@@ -88,7 +89,7 @@ namespace AspNetCore.MicroService.Extensions.Crud
             });
         }
         
-        public static Routing.Builder.IRouteBuilder<T> Put<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder, string id)
+        public static IRouteBuilder<T> Put<T>(this IRouteBuilder<T> routeBuilder, string id)
         {
             return routeBuilder.Put(c => { Put(c, routeBuilder.Set as ICollection<T>, id); });
         }
@@ -107,7 +108,7 @@ namespace AspNetCore.MicroService.Extensions.Crud
             return routeBuilder.Delete(c => { Delete(c, set, id); });
         }
         
-        public static Routing.Builder.IRouteBuilder<T> Delete<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder)
+        public static IRouteBuilder<T> Delete<T>(this IRouteBuilder<T> routeBuilder)
         {
             return routeBuilder.Delete(c =>
             {
@@ -116,7 +117,7 @@ namespace AspNetCore.MicroService.Extensions.Crud
             });
         }
         
-        public static Routing.Builder.IRouteBuilder<T> Delete<T>(this Routing.Builder.IRouteBuilder<T> routeBuilder, string id)
+        public static IRouteBuilder<T> Delete<T>(this IRouteBuilder<T> routeBuilder, string id)
         {
             return routeBuilder.Delete(c => { Delete(c, routeBuilder.Set as ICollection<T>, id); });
         }

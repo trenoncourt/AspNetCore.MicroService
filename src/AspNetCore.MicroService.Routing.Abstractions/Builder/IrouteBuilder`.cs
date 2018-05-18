@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
-namespace AspNetCore.MicroService.Routing.Builder
+namespace AspNetCore.MicroService.Routing.Abstractions.Builder
 {
     public interface IRouteBuilder<T> : IRouteBuilder
     {

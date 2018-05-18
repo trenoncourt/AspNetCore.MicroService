@@ -14,5 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\samples\CrudSample\CrudSample.csproj" />
+    <ProjectReference Include="..\..\samples\RoutingSample\RoutingSample.csproj" />
   </ItemGroup>
 </Project>

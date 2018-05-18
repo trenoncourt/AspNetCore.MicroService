@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AspNetCore.MicroService.Extensions.Crud\AspNetCore.MicroService.Extensions.Crud.csproj" />
+    <ProjectReference Include="..\..\src\AspNetCore.MicroService.Routing\AspNetCore.MicroService.Routing.csproj" />
   </ItemGroup>
 </Project>
