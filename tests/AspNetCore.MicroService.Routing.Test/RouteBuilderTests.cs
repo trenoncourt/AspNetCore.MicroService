@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AspNetCore.MicroService.Routing.Builder;
 using FluentAssertions;
@@ -263,6 +264,49 @@ namespace AspNetCore.MicroService.Routing.Test
             // Assert
             responseData1.Should().Be(res1);
             responseData2.Should().Be(res2);
+        }
+        
+        [Fact]
+        public async Task AddRoutesWithBeforeEachAndHeader_QueryRoutes_VerifyHeaderIsInResults()
+        {
+            // Arrange
+            var server = new TestServer(new WebHostBuilder()
+                .ConfigureServices(s => s.AddRouting().BuildServiceProvider())
+                .Configure(app => 
+                    app.Route("tests")
+                        .Get(c => c.Response.StatusCode = 200)
+                        .Post(c => c.Response.StatusCode = 201)
+                    .SubRoute("{id}")
+                        .Get(c => c.Response.StatusCode = 200)
+                        .Put(c => c.Response.StatusCode = 204)
+                        .Delete(c => c.Response.StatusCode = 204)
+                    .BeforeEach(c => c.Response.Headers.Add("before-each", "ok"))
+                    .Use()));
+
+            HttpClient client = server.CreateClient();
+            
+            // Act
+            var response1 = await client.GetAsync("/tests");
+            response1.EnsureSuccessStatusCode();
+            
+            var response2 = await client.PostAsync("/tests", new StringContent(""));
+            response2.EnsureSuccessStatusCode();
+            
+            var response3 = await client.GetAsync("/tests/1");
+            response3.EnsureSuccessStatusCode();
+            
+            var response4 = await client.PutAsync("/tests/1", new StringContent(""));
+            response4.EnsureSuccessStatusCode();
+            
+            var response5 = await client.DeleteAsync("/tests/1");
+            response5.EnsureSuccessStatusCode();
+            
+            // Assert
+            response1.Headers.GetValues("before-each").First().Should().Be("ok");
+            response2.Headers.GetValues("before-each").First().Should().Be("ok");
+            response3.Headers.GetValues("before-each").First().Should().Be("ok");
+            response4.Headers.GetValues("before-each").First().Should().Be("ok");
+            response5.Headers.GetValues("before-each").First().Should().Be("ok");
         }
         
     }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using AspNetCore.MicroService.Routing.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace RoutingSample
 {
@@ -48,24 +51,49 @@ namespace RoutingSample
                     app
                         .UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
                         .Route("users")
-                            .Get(async c => await c.Response.WriteAsync("lot of yeah!"))
+                            .Get(async c =>
+                            {
+                                await c.Response.WriteAsync("lot of yeah!");
+                            })
                             .Post(async c =>
                             {
                                 c.Request.EnableRewind();
                                 await c.Request.Body.CopyToAsync(c.Response.Body);
                             })
-                        .Route("users/{id}")
-                            .Get(async c => await c.Response.WriteAsync("just one yeah!"))
-                            .Put(async c =>
+                            .SubRoute("{id}")
+                                .Get(async c => await c.Response.WriteAsync("just one yeah!"))
+                                .Put(async c =>
+                                {
+                                    c.Request.EnableRewind();
+                                    await c.Request.Body.CopyToAsync(c.Response.Body);
+                                })
+                                .Delete(c => c.Response.StatusCode = 204)
+                            .BeforeEach(async c =>
                             {
-                                c.Request.EnableRewind();
-                                await c.Request.Body.CopyToAsync(c.Response.Body);
+                                if (c.Request.Method != "GET")
+                                {
+                                    using (var streamReader = new StreamReader(c.Request.Body, Encoding.UTF8))
+                                    {
+                                        string body = await streamReader.ReadToEndAsync();
+                                        Events.Add(new Event {Method = c.Request.Method, Body = body.Replace("\n", "").Replace("\t", ""), Path = c.Request.Path.ToString()}); 
+                                    }
+                                }
+                                c.Response.Headers.Add("before-each", "ok");
                             })
-                            .Delete(c => c.Response.StatusCode = 204)
-                            .Use();
+                        .Route("events")
+                            .Get(async c =>
+                            {
+                                c.Response.ContentType = "application/json";
+                                await c.Response.WriteAsync(JsonConvert.SerializeObject(Events));
+                            })
+                        .Use();
                 })
                 .Build()
                 .Run();
         }
+
+        public static readonly List<Event> Events = new List<Event>();
+        
+        
     }
 }

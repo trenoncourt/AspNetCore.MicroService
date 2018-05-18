@@ -10,6 +10,8 @@ namespace AspNetCore.MicroService.Routing.Abstractions.Builder
         
         IRouteBuilder Route(string template);
         
+        IRouteBuilder SubRoute(string template);
+        
         IRouteBuilder Get(Action<HttpContext> handler);
         
         IRouteBuilder Post(Action<HttpContext> handler);
@@ -17,6 +19,8 @@ namespace AspNetCore.MicroService.Routing.Abstractions.Builder
         IRouteBuilder Put(Action<HttpContext> handler);
         
         IRouteBuilder Delete(Action<HttpContext> handler);
+
+        IRouteBuilder BeforeEach(Action<HttpContext> handler);
         
         IApplicationBuilder Use();
     }

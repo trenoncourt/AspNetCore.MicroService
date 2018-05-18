@@ -19,5 +19,7 @@ namespace AspNetCore.MicroService.Routing.Abstractions.Builder
         new IRouteBuilder<T> Put(Action<HttpContext> handler);
 
         new IRouteBuilder<T> Delete(Action<HttpContext> handler);
+        
+        new IRouteBuilder<T> BeforeEach(Action<HttpContext> handler);
     }
 }

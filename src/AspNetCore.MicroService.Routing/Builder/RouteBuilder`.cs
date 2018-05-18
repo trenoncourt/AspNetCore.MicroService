@@ -11,7 +11,7 @@ namespace AspNetCore.MicroService.Routing.Builder
     {
 
         public IEnumerable<T> Set { get; }
-
+        
         public RouteBuilder(string template, IApplicationBuilder app, IEnumerable<T> set) : base(template, app)
         {
             Set = set;
@@ -40,6 +40,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 builder.MapGet(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
@@ -52,6 +53,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 builder.MapPost(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
@@ -64,6 +66,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 builder.MapPut(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
@@ -76,9 +79,16 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 builder.MapDelete(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
+            return this;
+        }
+
+        public new IRouteBuilder<T> BeforeEach(Action<HttpContext> handler)
+        {
+            BeforeEachActions.Add(handler);
             return this;
         }
     }

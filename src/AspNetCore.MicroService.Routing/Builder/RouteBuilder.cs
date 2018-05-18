@@ -13,19 +13,15 @@ namespace AspNetCore.MicroService.Routing.Builder
     {
         protected readonly List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>> RouteBuilders = new List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>>();
         protected readonly IApplicationBuilder App;
-        protected readonly List<RouteBuilder> AllRoutes = new List<RouteBuilder>();
+        protected readonly List<RouteBuilder> AllRoutes;
+        protected readonly List<Action<HttpContext>> BeforeEachActions;
         
-        public RouteBuilder(string template, IApplicationBuilder app)
+        public RouteBuilder(string template, IApplicationBuilder app, List<RouteBuilder> chainedRoutes = null, List<Action<HttpContext>> beforeEachActions = null)
         {
             Template = template;
             App = app;
-        }
-        
-        public RouteBuilder(string template, IApplicationBuilder app, List<RouteBuilder> chainedRoutes)
-        {
-            Template = template;
-            App = app;
-            AllRoutes = chainedRoutes;
+            AllRoutes = chainedRoutes ?? new List<RouteBuilder>();
+            BeforeEachActions = beforeEachActions ?? new List<Action<HttpContext>>();
         }
         
         public string Template { get; }
@@ -35,13 +31,20 @@ namespace AspNetCore.MicroService.Routing.Builder
             AllRoutes.Add(this);
             return new RouteBuilder(template, App, AllRoutes);
         }
-        
+
+        public IRouteBuilder SubRoute(string template)
+        {
+            AllRoutes.Add(this);
+            return new RouteBuilder($"{Template}/{template.TrimStart('/')}", App, AllRoutes, BeforeEachActions);
+        }
+
         public IRouteBuilder Get(Action<HttpContext> handler)
         {
             RouteBuilders.Add(builder =>
             {
                 builder.MapGet(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
@@ -54,6 +57,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 builder.MapPost(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
@@ -66,6 +70,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 builder.MapPut(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
@@ -78,9 +83,16 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 builder.MapDelete(Template, async context =>
                 {
+                    BeforeEach(context);
                     handler(context);
                 });
             });
+            return this;
+        }
+
+        public IRouteBuilder BeforeEach(Action<HttpContext> handler)
+        {
+            BeforeEachActions.Add(handler);
             return this;
         }
 
@@ -103,6 +115,14 @@ namespace AspNetCore.MicroService.Routing.Builder
             foreach (Action<Microsoft.AspNetCore.Routing.IRouteBuilder> addRoute in RouteBuilders)
             {
                 addRoute(routeBuilder);
+            }
+        }
+        
+        protected void BeforeEach(HttpContext httpContext)
+        {
+            foreach (Action<HttpContext> action in BeforeEachActions)
+            {
+                action(httpContext);
             }
         }
     }
