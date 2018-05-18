@@ -68,7 +68,7 @@ namespace AspNetCore.MicroService.Extensions.Crud.Tests
             CrudSample.Program.Users.Should().ContainSingle(u => u.Id.ToString() == id);
             locationResponse.StatusCode.Should().Be(200);
             locationResponse.Content.Headers.ContentType.MediaType.Should().Be("application/json");
-            CrudSample.Program.Users.Single(u => u.Id.ToString() == id).Should().BeEquivalentTo(foundedUser);
+            CrudSample.Program.Users.First(u => u.Id.ToString() == id).Should().BeEquivalentTo(foundedUser);
         }
         
         [Fact]
