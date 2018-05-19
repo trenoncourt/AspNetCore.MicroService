@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Routing.Abstractions", "src\AspNetCore.MicroService.Routing.Abstractions\AspNetCore.MicroService.Routing.Abstractions.csproj", "{AF1E3117-5AC7-439F-AB0E-93395634119B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.MicroService.Swagger", "src\AspNetCore.MicroService.Swagger\AspNetCore.MicroService.Swagger.csproj", "{AFC278BC-44F9-46B4-8660-1FF43BCC8B6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,7 @@ Global
 		{99811F60-572D-4F4E-8DF4-42D04DB454B0} = {1DC02090-A09A-411C-8E0A-865C8C89C94A}
 		{E31C985B-CEF3-4617-84CD-50D2685C0287} = {403888BF-B6BA-41EF-9B14-9F291DDE6678}
 		{AF1E3117-5AC7-439F-AB0E-93395634119B} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
+		{AFC278BC-44F9-46B4-8660-1FF43BCC8B6C} = {08A1E6FA-335F-4B78-AA24-76E9A65B735A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{06497EA4-F316-4CB3-B5C2-45DBD0566886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -91,5 +94,9 @@ Global
 		{AF1E3117-5AC7-439F-AB0E-93395634119B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1E3117-5AC7-439F-AB0E-93395634119B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF1E3117-5AC7-439F-AB0E-93395634119B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFC278BC-44F9-46B4-8660-1FF43BCC8B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFC278BC-44F9-46B4-8660-1FF43BCC8B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFC278BC-44F9-46B4-8660-1FF43BCC8B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFC278BC-44F9-46B4-8660-1FF43BCC8B6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
