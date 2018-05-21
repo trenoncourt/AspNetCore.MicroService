@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AspNetCore.MicroService.Routing
+namespace AspNetCore.MicroService.Routing.Abstractions
 {
     public class RouteActionMetadata
     {

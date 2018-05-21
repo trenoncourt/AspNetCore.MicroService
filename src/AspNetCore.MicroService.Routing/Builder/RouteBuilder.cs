@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using AspNetCore.MicroService.Routing.Abstractions;
+using AspNetCore.MicroService.Routing.Metadatas;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -17,7 +19,6 @@ namespace AspNetCore.MicroService.Routing.Builder
         protected readonly List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>> RouteBuilders = new List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>>();
         protected readonly IApplicationBuilder App;
         protected readonly List<Action<HttpContext>> BeforeEachActions;
-        protected readonly MicroServiceSettings Settings;
         
         public RouteBuilder(string template, IApplicationBuilder app, List<IRouteBuilder> chainedRoutes = null, List<Action<HttpContext>> beforeEachActions = null)
         {
@@ -30,6 +31,8 @@ namespace AspNetCore.MicroService.Routing.Builder
         
         public string Template { get; }
         public List<IRouteBuilder> AllRoutes { get; }
+        public MicroServiceSettings Settings { get; }
+        public ICollection<RouteActionMetadata> Metadatas { get; }
         
         public virtual IRouteBuilder Route(string template)
         {
@@ -45,6 +48,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Get(Action<HttpContext> handler)
         {
+            AddMetadatas("GET");
             RouteBuilders.Add(builder =>
             {
                 builder.MapGet(Template, async context =>
@@ -58,6 +62,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Post(Action<HttpContext> handler)
         {
+            AddMetadatas("POST");
             RouteBuilders.Add(builder =>
             {
                 builder.MapPost(Template, async context =>
@@ -71,6 +76,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Put(Action<HttpContext> handler)
         {
+            AddMetadatas("PUT");
             RouteBuilders.Add(builder =>
             {
                 builder.MapPut(Template, async context =>
@@ -84,6 +90,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Delete(Action<HttpContext> handler)
         {
+            AddMetadatas("DELETE");
             RouteBuilders.Add(builder =>
             {
                 builder.MapDelete(Template, async context =>
@@ -121,6 +128,15 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 addRoute(routeBuilder);
             }
+        }
+
+        private void AddMetadatas(string httpMethod)
+        {
+            this.AddMetadata(metadatas =>
+            {
+                metadatas.HttpMethod = httpMethod;
+                metadatas.RelativePath = Template;
+            });
         }
         
         protected void BeforeEach(HttpContext httpContext)

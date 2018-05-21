@@ -5,4 +5,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.3" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.MicroService\AspNetCore.MicroService.csproj" />
+  </ItemGroup>
 </Project>

@@ -8,8 +8,12 @@ namespace AspNetCore.MicroService.Routing.Abstractions.Builder
     public interface IRouteBuilder
     {
         string Template { get; }
+
+        MicroServiceSettings Settings { get; }
         
         List<IRouteBuilder> AllRoutes { get; }
+        
+        ICollection<RouteActionMetadata> Metadatas { get; }
         
         IRouteBuilder Route(string template);
         
