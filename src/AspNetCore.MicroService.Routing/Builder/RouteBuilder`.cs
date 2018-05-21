@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using AspNetCore.MicroService.Routing.Abstractions;
 using AspNetCore.MicroService.Routing.Abstractions.Builder;
-using AspNetCore.MicroService.Routing.Metadatas;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -37,7 +38,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public new IRouteBuilder<T> Get(Action<HttpContext> handler)
         {
-            AddMetadatas("GET");
+            AddMetadatas(HttpMethods.Get);
             RouteBuilders.Add(builder =>
             {
                 builder.MapGet(Template, async context =>
@@ -51,7 +52,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public new IRouteBuilder<T> Post(Action<HttpContext> handler)
         {
-            AddMetadatas("POST");
+            AddMetadatas(HttpMethods.Post);
             RouteBuilders.Add(builder =>
             {
                 builder.MapPost(Template, async context =>
@@ -65,7 +66,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public new IRouteBuilder<T> Put(Action<HttpContext> handler)
         {
-            AddMetadatas("PUT");
+            AddMetadatas(HttpMethods.Put);
             RouteBuilders.Add(builder =>
             {
                 builder.MapPut(Template, async context =>
@@ -79,7 +80,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public new IRouteBuilder<T> Delete(Action<HttpContext> handler)
         {
-            AddMetadatas("DELETE");
+            AddMetadatas(HttpMethods.Delete);
             RouteBuilders.Add(builder =>
             {
                 builder.MapDelete(Template, async context =>
@@ -97,15 +98,39 @@ namespace AspNetCore.MicroService.Routing.Builder
             return this;
         }
 
-        private void AddMetadatas(string httpMethod)
+        private void AddMetadatas(string httpMethod, bool pathParameter = false)
         {
-            this.AddMetadata(metadatas =>
+            if (!Settings.EnableMetadatas) return;
+            var routeActionMetadata = new RouteActionMetadata
             {
-                metadatas.HttpMethod = httpMethod;
-                metadatas.RelativePath = Template;
-                metadatas.ReturnType = typeof(T);
-                metadatas.InputType = typeof(T);
-            });
+                HttpMethod = httpMethod,
+                RelativePath = Template,
+                ReturnType = httpMethod == HttpMethods.Get ? typeof(T) : null,
+                InputType = httpMethod != HttpMethods.Get ? typeof(T) : null
+            };
+            if (httpMethod == HttpMethods.Get)
+            {
+                routeActionMetadata.ReturnType = typeof(T);
+                if (pathParameter)
+                {
+                    routeActionMetadata.InputType = typeof(string);
+                    routeActionMetadata.InputLocation = InputLocation.Path;
+                }
+            }
+            else if (httpMethod == HttpMethods.Post)
+            {
+                routeActionMetadata.InputType = typeof(T);
+            }
+            else if (httpMethod == HttpMethods.Put)
+            {
+                routeActionMetadata.InputType = typeof(T);
+            }
+            else if (httpMethod == HttpMethods.Delete)
+            {
+                routeActionMetadata.InputType = typeof(string);
+                routeActionMetadata.InputLocation = InputLocation.Path;
+            }
+            Metadatas.RouteActionMetadatas.Add(routeActionMetadata);
         }
     }
 }

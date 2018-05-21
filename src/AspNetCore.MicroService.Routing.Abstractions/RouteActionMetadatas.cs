@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AspNetCore.MicroService.Routing.Abstractions
 {
@@ -23,5 +24,9 @@ namespace AspNetCore.MicroService.Routing.Abstractions
         /// Gets or sets the input type for this action.
         /// </summary>
         public Type InputType { get; set; }
+
+        public InputLocation InputLocation { get; set; }
+
+        public List<string> ContentTypes { get; set; }
     }
 }

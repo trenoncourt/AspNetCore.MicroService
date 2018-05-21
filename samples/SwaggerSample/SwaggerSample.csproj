@@ -7,6 +7,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="2.4.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AspNetCore.MicroService.Extensions.Json\AspNetCore.MicroService.Extensions.Json.csproj" />
     <ProjectReference Include="..\..\src\AspNetCore.MicroService.Routing\AspNetCore.MicroService.Routing.csproj" />
     <ProjectReference Include="..\..\src\AspNetCore.MicroService.Swagger\AspNetCore.MicroService.Swagger.csproj" />
   </ItemGroup>

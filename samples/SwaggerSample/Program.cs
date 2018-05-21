@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using AspNetCore.MicroService.DependencyInjection;
+using AspNetCore.MicroService.Extensions.Json;
+using AspNetCore.MicroService.Extensions.Json.DependencyInjection;
 using AspNetCore.MicroService.Routing.Builder;
 using AspNetCore.MicroService.Swagger;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SwaggerSample.Dtos;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SwaggerSample
@@ -45,7 +49,7 @@ namespace SwaggerSample
                 {
                     services
                         .AddRouting()
-                        .AddMicroService(x => x.AddSwagger(), settings => settings.EnableMetadatas = true)
+                        .AddMicroService(x => x.AddJson().AddMetadatas().AddSwagger())
                         .AddCors()
                         .BuildServiceProvider();
                 })
@@ -54,8 +58,8 @@ namespace SwaggerSample
                     
                     app
                         .UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
-                        .Route("users")
-                        .Get(async c => { await c.Response.WriteAsync("lot of yeah!"); })
+                        .Route("users", Users)
+                        .Get(async x => await x.WriteJsonAsync(Users))
                         .Post(async c =>
                         {
                             c.Request.EnableRewind();
@@ -82,7 +86,27 @@ namespace SwaggerSample
                 })
                 .Build()
                 .Run();
-        }        
+        }    
+
+        public static readonly List<User> Users = new List<User>
+        {
+            new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "John",
+                LastName = "Doe",
+                Age = 42,
+                Email = "john-doe@foo.bar",
+            },
+            new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Jane",
+                LastName = "Doe",
+                Age = 24,
+                Email = "jane-doe@foo.bar",
+            }
+        };    
         
     }
 }

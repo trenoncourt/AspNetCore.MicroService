@@ -17,7 +17,7 @@ namespace AspNetCore.MicroService.DependencyInjection
             settingsHandler?.Invoke(settings);
             services.AddSingleton(settings);
                 
-            var builder = new MicroServiceBuilder(services);
+            var builder = new MicroServiceBuilder(services, settings);
             handler?.Invoke(builder);
             return services;
         }

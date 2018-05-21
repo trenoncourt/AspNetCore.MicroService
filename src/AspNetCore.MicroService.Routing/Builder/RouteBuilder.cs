@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using AspNetCore.MicroService.Routing.Abstractions;
-using AspNetCore.MicroService.Routing.Metadatas;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -17,8 +15,8 @@ namespace AspNetCore.MicroService.Routing.Builder
     public class RouteBuilder : IRouteBuilder
     {
         protected readonly List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>> RouteBuilders = new List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>>();
-        protected readonly IApplicationBuilder App;
         protected readonly List<Action<HttpContext>> BeforeEachActions;
+        protected readonly MicroServiceMetadatas Metadatas;
         private readonly List<IRouteBuilder> _allRoutes;
 
         public RouteBuilder(string template, IApplicationBuilder app, List<IRouteBuilder> chainedRoutes = null, List<Action<HttpContext>> beforeEachActions = null)
@@ -28,7 +26,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             _allRoutes = chainedRoutes ?? new List<IRouteBuilder>();
             BeforeEachActions = beforeEachActions ?? new List<Action<HttpContext>>();
             Settings = app.ApplicationServices.GetService<MicroServiceSettings>() ?? new MicroServiceSettings();
-            Metadatas = new List<RouteActionMetadata>();
+            Metadatas = app.ApplicationServices.GetService<MicroServiceMetadatas>();
         }
         
         public string Template { get; }
@@ -36,7 +34,8 @@ namespace AspNetCore.MicroService.Routing.Builder
         public List<IRouteBuilder> AllRoutes => _allRoutes.Concat(new[] {this}).ToList();
 
         public MicroServiceSettings Settings { get; }
-        public ICollection<RouteActionMetadata> Metadatas { get; }
+        
+        public IApplicationBuilder App { get; }
         
         public virtual IRouteBuilder Route(string template)
         {
@@ -52,7 +51,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Get(Action<HttpContext> handler)
         {
-            AddMetadatas("GET");
+            AddMetadatas(HttpMethods.Get);
             RouteBuilders.Add(builder =>
             {
                 builder.MapGet(Template, async context =>
@@ -66,7 +65,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Post(Action<HttpContext> handler)
         {
-            AddMetadatas("POST");
+            AddMetadatas(HttpMethods.Post);
             RouteBuilders.Add(builder =>
             {
                 builder.MapPost(Template, async context =>
@@ -80,7 +79,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Put(Action<HttpContext> handler)
         {
-            AddMetadatas("PUT");
+            AddMetadatas(HttpMethods.Put);
             RouteBuilders.Add(builder =>
             {
                 builder.MapPut(Template, async context =>
@@ -94,7 +93,7 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         public IRouteBuilder Delete(Action<HttpContext> handler)
         {
-            AddMetadatas("DELETE");
+            AddMetadatas(HttpMethods.Delete);
             RouteBuilders.Add(builder =>
             {
                 builder.MapDelete(Template, async context =>
@@ -134,10 +133,11 @@ namespace AspNetCore.MicroService.Routing.Builder
 
         private void AddMetadatas(string httpMethod)
         {
-            this.AddMetadata(metadatas =>
+            if (!Settings.EnableMetadatas) return;
+            Metadatas.RouteActionMetadatas.Add(new RouteActionMetadata
             {
-                metadatas.HttpMethod = httpMethod;
-                metadatas.RelativePath = Template;
+                HttpMethod = httpMethod,
+                RelativePath = Template
             });
         }
         
