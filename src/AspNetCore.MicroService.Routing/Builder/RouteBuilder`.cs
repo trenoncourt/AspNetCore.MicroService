@@ -17,7 +17,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             Set = set;
         }
 
-        public RouteBuilder(string template, IApplicationBuilder app, List<RouteBuilder> chainedRoutes, IEnumerable<T> set) : base(template, app, chainedRoutes)
+        public RouteBuilder(string template, IApplicationBuilder app, List<Abstractions.Builder.IRouteBuilder> chainedRoutes, IEnumerable<T> set) : base(template, app, chainedRoutes)
         {
             Set = set;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
@@ -7,6 +8,8 @@ namespace AspNetCore.MicroService.Routing.Abstractions.Builder
     public interface IRouteBuilder
     {
         string Template { get; }
+        
+        List<IRouteBuilder> AllRoutes { get; }
         
         IRouteBuilder Route(string template);
         

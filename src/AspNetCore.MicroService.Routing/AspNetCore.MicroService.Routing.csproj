@@ -7,5 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AspNetCore.MicroService.Routing.Abstractions\AspNetCore.MicroService.Routing.Abstractions.csproj" />
+    <ProjectReference Include="..\AspNetCore.MicroService\AspNetCore.MicroService.csproj" />
   </ItemGroup>
 </Project>

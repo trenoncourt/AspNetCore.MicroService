@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using IRouteBuilder = AspNetCore.MicroService.Routing.Abstractions.Builder.IRouteBuilder;
 
 namespace AspNetCore.MicroService.Routing.Builder
@@ -13,18 +16,20 @@ namespace AspNetCore.MicroService.Routing.Builder
     {
         protected readonly List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>> RouteBuilders = new List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>>();
         protected readonly IApplicationBuilder App;
-        protected readonly List<RouteBuilder> AllRoutes;
         protected readonly List<Action<HttpContext>> BeforeEachActions;
+        protected readonly MicroServiceSettings Settings;
         
-        public RouteBuilder(string template, IApplicationBuilder app, List<RouteBuilder> chainedRoutes = null, List<Action<HttpContext>> beforeEachActions = null)
+        public RouteBuilder(string template, IApplicationBuilder app, List<IRouteBuilder> chainedRoutes = null, List<Action<HttpContext>> beforeEachActions = null)
         {
             Template = template;
             App = app;
-            AllRoutes = chainedRoutes ?? new List<RouteBuilder>();
+            AllRoutes = chainedRoutes ?? new List<IRouteBuilder>();
             BeforeEachActions = beforeEachActions ?? new List<Action<HttpContext>>();
+            Settings = app.ApplicationServices.GetService<MicroServiceSettings>() ?? new MicroServiceSettings();
         }
         
         public string Template { get; }
+        public List<IRouteBuilder> AllRoutes { get; }
         
         public virtual IRouteBuilder Route(string template)
         {
