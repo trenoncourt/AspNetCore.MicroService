@@ -28,6 +28,7 @@ namespace AspNetCore.MicroService.Routing.Builder
             _allRoutes = chainedRoutes ?? new List<IRouteBuilder>();
             BeforeEachActions = beforeEachActions ?? new List<Action<HttpContext>>();
             Settings = app.ApplicationServices.GetService<MicroServiceSettings>() ?? new MicroServiceSettings();
+            Metadatas = new List<RouteActionMetadata>();
         }
         
         public string Template { get; }

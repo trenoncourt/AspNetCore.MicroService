@@ -11,17 +11,22 @@ namespace AspNetCore.MicroService.Swagger
     {
         public static IRouteBuilder UseSwagger(this IRouteBuilder routeBuilder)
         {
-            IEnumerable<PathItem> pathItems = routeBuilder.AllRoutes
+            var t = routeBuilder.AllRoutes
+                .SelectMany(r => r.Metadatas).ToList();
+            
+            IDictionary<string, PathItem> pathItems = routeBuilder.AllRoutes
                 .SelectMany(r => r.Metadatas)
                 .GroupBy(m => m.RelativePath)
-                .Select(m => new PathItem
-                {
-                    Get = CreateOperation(m, HttpMethods.Get),
-                    Post = CreateOperation(m, HttpMethods.Post),
-                    Put = CreateOperation(m, HttpMethods.Put),
-                    Delete = CreateOperation(m, HttpMethods.Delete)
-                });
-
+                .ToDictionary(m => "/" + m.First().RelativePath, m =>
+                    new PathItem
+                    {
+                        Get = CreateOperation(m, HttpMethods.Get),
+                        Post = CreateOperation(m, HttpMethods.Post),
+                        Put = CreateOperation(m, HttpMethods.Put),
+                        Delete = CreateOperation(m, HttpMethods.Delete)
+                        
+                    });
+            MicroServiceSwaggerGenerator.AddPaths(pathItems);
             return routeBuilder;
         }
 

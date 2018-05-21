@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="2.4.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AspNetCore.MicroService.Routing\AspNetCore.MicroService.Routing.csproj" />
+    <ProjectReference Include="..\..\src\AspNetCore.MicroService.Swagger\AspNetCore.MicroService.Swagger.csproj" />
+  </ItemGroup>
+</Project>
