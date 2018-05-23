@@ -16,7 +16,6 @@ namespace AspNetCore.MicroService.Routing.Builder
     {
         protected readonly List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>> RouteBuilders = new List<Action<Microsoft.AspNetCore.Routing.IRouteBuilder>>();
         protected readonly List<Action<HttpContext>> BeforeEachActions;
-        protected readonly MicroServiceMetadatas Metadatas;
         private readonly List<IRouteBuilder> _allRoutes;
 
         public RouteBuilder(string template, IApplicationBuilder app, List<IRouteBuilder> chainedRoutes = null, List<Action<HttpContext>> beforeEachActions = null)
@@ -37,6 +36,8 @@ namespace AspNetCore.MicroService.Routing.Builder
         
         public IApplicationBuilder App { get; }
         
+        public MicroServiceMetadatas Metadatas { get; }
+
         public virtual IRouteBuilder Route(string template)
         {
             AllRoutes.Add(this);

@@ -218,5 +218,40 @@ namespace AspNetCore.MicroService.Extensions.Crud
             set.Remove(o);
             c.Response.StatusCode = 204;
         }
+        
+        private static void AddMetadatas<T>(this IRouteBuilder<T> routeBuilder, string httpMethod, bool pathParameter = false)
+        {
+            if (!routeBuilder.Settings.EnableMetadatas) return;
+            var routeActionMetadata = new RouteActionMetadata
+            {
+                HttpMethod = httpMethod,
+                RelativePath = routeBuilder.Template,
+                ReturnType = httpMethod == HttpMethods.Get ? typeof(T) : null,
+                InputType = httpMethod != HttpMethods.Get ? typeof(T) : null
+            };
+            if (httpMethod == HttpMethods.Get)
+            {
+                routeActionMetadata.ReturnType = typeof(T);
+                if (pathParameter)
+                {
+                    routeActionMetadata.InputType = typeof(string);
+                    routeActionMetadata.InputLocation = InputLocation.Path;
+                }
+            }
+            else if (httpMethod == HttpMethods.Post)
+            {
+                routeActionMetadata.InputType = typeof(T);
+            }
+            else if (httpMethod == HttpMethods.Put)
+            {
+                routeActionMetadata.InputType = typeof(T);
+            }
+            else if (httpMethod == HttpMethods.Delete)
+            {
+                routeActionMetadata.InputType = typeof(string);
+                routeActionMetadata.InputLocation = InputLocation.Path;
+            }
+            routeBuilder.Metadatas.RouteActionMetadatas.Add(routeActionMetadata);
+        }
     }
 }

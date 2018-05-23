@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using IParameter = Swashbuckle.AspNetCore.Swagger.IParameter;
 
 namespace AspNetCore.MicroService.Swagger
 {
