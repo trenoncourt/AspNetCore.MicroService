@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AspNetCore.MicroService.Routing.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -135,11 +136,21 @@ namespace AspNetCore.MicroService.Routing.Builder
         private void AddMetadatas(string httpMethod)
         {
             if (!Settings.EnableMetadatas) return;
-            Metadatas.RouteActionMetadatas.Add(new RouteActionMetadata
+
+            var routeActionMetadata = new RouteActionMetadata
             {
                 HttpMethod = httpMethod,
                 RelativePath = Template
-            });
+            };
+            foreach (Match match in Regex.Matches(Template, "{(.*?)}"))
+            {
+                routeActionMetadata.Input.PathParameters.Add(new PathParameter
+                {
+                    Name = match.Groups[1].Value,
+                    Type = typeof(string)
+                }); 
+            }
+            Metadatas.RouteActionMetadatas.Add(routeActionMetadata);
         }
         
         protected void BeforeEach(HttpContext httpContext)

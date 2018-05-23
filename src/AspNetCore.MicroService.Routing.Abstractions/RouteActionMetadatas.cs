@@ -5,6 +5,13 @@ namespace AspNetCore.MicroService.Routing.Abstractions
 {
     public class RouteActionMetadata
     {
+        public RouteActionMetadata()
+        {
+            Input = new Input();
+            Output = new Output();
+            ContentTypes = new List<string>();
+        }
+        
         /// <summary>
         /// Gets or sets the supported HTTP method for this action.
         /// </summary>
@@ -18,16 +25,34 @@ namespace AspNetCore.MicroService.Routing.Abstractions
         /// <summary>
         /// Gets or sets the return type for this action.
         /// </summary>
-        public Type ReturnType { get; set; }
+        public Output Output { get; set; }
         
         /// <summary>
-        /// Gets or sets the input type for this action.
+        /// Gets or sets the input for this action.
         /// </summary>
-        public Type InputType { get; set; }
+        public Input Input { get; set; }
+        
+        public IList<string> ContentTypes { get; }
+    }
 
-        public InputLocation InputLocation { get; set; }
+    public class Output
+    {
+        public Type Type { get; set; }
+    }
 
-        public List<string> ContentTypes { get; set; }
+    public class Input
+    {
+        public Input()
+        {
+            PathParameters = new List<PathParameter>();
+            QueryParameters = new List<QueryParameter>();
+        }
+        
+        public IList<PathParameter> PathParameters { get; }
+        
+        public IList<QueryParameter> QueryParameters { get; }
+        
+        public BodyParameter BodyParameter { get; set; }
     }
 
     public interface IParameter
@@ -39,6 +64,8 @@ namespace AspNetCore.MicroService.Routing.Abstractions
         string Description { get; set; }
 
         bool Required { get; set; }
+
+        object Default { get; set; }
         
         Dictionary<string, object> Extensions { get; }
     }
@@ -53,6 +80,8 @@ namespace AspNetCore.MicroService.Routing.Abstractions
 
         public bool Required { get; set; }
         
+        public object Default { get; set; }
+
         public Dictionary<string, object> Extensions { get; }
     }
 
@@ -65,11 +94,19 @@ namespace AspNetCore.MicroService.Routing.Abstractions
         public int? Minimum { get; set; }
     } 
 
+    public class BodyParameter : Parameter
+    {
+    } 
+
     public class QueryParameter : UrlParameter
     {
     }
 
     public class PathParameter : UrlParameter
     {
+        public PathParameter()
+        {
+            Required = true;
+        }
     }
 }

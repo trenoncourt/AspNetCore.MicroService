@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using AspNetCore.MicroService.Routing.Abstractions;
 using AspNetCore.MicroService.Routing.Abstractions.Builder;
 using Microsoft.AspNetCore.Builder;
@@ -105,30 +106,27 @@ namespace AspNetCore.MicroService.Routing.Builder
             {
                 HttpMethod = httpMethod,
                 RelativePath = Template,
-                ReturnType = httpMethod == HttpMethods.Get ? typeof(T) : null,
-                InputType = httpMethod != HttpMethods.Get ? typeof(T) : null
             };
+            foreach (Match match in Regex.Matches(Template, "{(.*?)}"))
+            {
+                routeActionMetadata.Input.PathParameters.Add(new PathParameter
+                {
+                    Name = match.Groups[1].Value,
+                    Type = typeof(string)
+                }); 
+            }
+            Metadatas.RouteActionMetadatas.Add(routeActionMetadata);
             if (httpMethod == HttpMethods.Get)
             {
-                routeActionMetadata.ReturnType = typeof(T);
-                if (pathParameter)
+                routeActionMetadata.Output.Type = typeof(T);
+            }
+            else if (httpMethod == HttpMethods.Post || httpMethod == HttpMethods.Put)
+            {
+                routeActionMetadata.Input.BodyParameter = new BodyParameter
                 {
-                    routeActionMetadata.InputType = typeof(string);
-                    routeActionMetadata.InputLocation = InputLocation.Path;
-                }
-            }
-            else if (httpMethod == HttpMethods.Post)
-            {
-                routeActionMetadata.InputType = typeof(T);
-            }
-            else if (httpMethod == HttpMethods.Put)
-            {
-                routeActionMetadata.InputType = typeof(T);
-            }
-            else if (httpMethod == HttpMethods.Delete)
-            {
-                routeActionMetadata.InputType = typeof(string);
-                routeActionMetadata.InputLocation = InputLocation.Path;
+                    Name  = typeof(T).Name,
+                    Type = typeof(T)
+                };
             }
             Metadatas.RouteActionMetadatas.Add(routeActionMetadata);
         }

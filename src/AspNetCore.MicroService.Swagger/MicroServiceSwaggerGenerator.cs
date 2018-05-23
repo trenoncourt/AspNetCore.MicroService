@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using BodyParameter = Swashbuckle.AspNetCore.Swagger.BodyParameter;
 using IParameter = Swashbuckle.AspNetCore.Swagger.IParameter;
 
 namespace AspNetCore.MicroService.Swagger
@@ -63,9 +64,9 @@ namespace AspNetCore.MicroService.Swagger
             {
                 OperationId = operationId,
                 Tags = new List<string> {operationId},
-                Responses = metadata.ReturnType != null ? SuccessResponses(metadata.ReturnType) : SuccessResponses(),
+                Responses = metadata.Output != null ? SuccessResponses(metadata.Output.Type) : SuccessResponses(),
                 Produces = metadata.ContentTypes,
-                Parameters = GetParameter(metadata.InputType, metadata.InputLocation)
+                Parameters = GetParameters(metadata)
             };
             
             return operation;
@@ -115,35 +116,54 @@ namespace AspNetCore.MicroService.Swagger
             };
         }
 
-        private List<IParameter> GetParameter(Type type, InputLocation inputLocation)
+        private List<IParameter> GetParameters(RouteActionMetadata metadata)
         {
-            if (type == null) return null;
-            if (inputLocation == InputLocation.Body)
+            var parameters = new List<IParameter>();
+            foreach (PathParameter pathParameter in metadata.Input.PathParameters)
             {
-                return new List<IParameter>
+                Schema schema = _schemaRegistry.GetOrRegister(pathParameter.Type);
+                parameters.Add(new NonBodyParameter
                 {
-                    new BodyParameter
-                    {
-                        Name = type.Name,
-                        In = inputLocation.ToString(),
-                        Required = true,
-                        Schema = _schemaRegistry.GetOrRegister(type)
-                    }
-                };
+                    Name = pathParameter.Name,
+                    In = "path",
+                    Required = pathParameter.Required,
+                    Type = schema.Type,
+                    Format = schema.Format,
+                    Description = schema.Description,
+                    Default = pathParameter.Default,
+                    Minimum = pathParameter.Minimum,
+                    Maximum = pathParameter.Maximum
+                });
+            }
+            foreach (QueryParameter pathParameter in metadata.Input.QueryParameters)
+            {
+                Schema schema = _schemaRegistry.GetOrRegister(pathParameter.Type);
+                parameters.Add(new NonBodyParameter
+                {
+                    Name = pathParameter.Name,
+                    In = "query",
+                    Required = pathParameter.Required,
+                    Type = schema.Type,
+                    Format = schema.Format,
+                    Description = schema.Description,
+                    Default = pathParameter.Default,
+                    Minimum = pathParameter.Minimum,
+                    Maximum = pathParameter.Maximum
+                });
+            }
+            if (metadata.Input.BodyParameter != null)
+            {
+                Schema schema = _schemaRegistry.GetOrRegister(metadata.Input.BodyParameter.Type);
+                parameters.Add(new BodyParameter
+                {
+                    Name = metadata.Input.BodyParameter.Name,
+                    In = "body",
+                    Required = true,
+                    Schema = schema
+                });
             }
 
-            Schema schema = _schemaRegistry.GetOrRegister(type);
-            return new List<IParameter>
-            {
-                new NonBodyParameter
-                {
-                    Name = "id",
-                    In = inputLocation.ToLowerString(),
-                    Required = inputLocation == InputLocation.Path ? true : false,
-                    Type = schema.Type,
-                    Format = schema.Format
-                }
-            };
+            return parameters;
         }
     }
 }
